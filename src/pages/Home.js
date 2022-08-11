@@ -1,9 +1,10 @@
-import { Container, styled } from "@mui/material";
-import React from "react";
+import { Alert, Box, Container, Snackbar, styled } from "@mui/material";
+import React, { useCallback } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import Grid from "@mui/material/Grid";
+import Loading from "../components/Loading";
 
 const StyledContainer = styled(Container)({
   marginTop: "40px",
@@ -26,7 +27,7 @@ const Home = () => {
       try {
         const response = await fetch(moviesApiUrl);
         if (!response.ok) {
-          throw new Error("Something went wrong, can't fetch words");
+          throw new Error("Something went wrong, can't fetch movies");
         }
         const data = await response.json();
         setMovies(data.results);
@@ -39,8 +40,27 @@ const Home = () => {
     getMovies();
   }, []);
 
+  const handleCloseSnackBar = useCallback((event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackBar(false);
+  }, []);
+
   return (
     <StyledContainer>
+      <Loading loading={isLoading} />
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={10000}
+        onClose={handleCloseSnackBar}
+      >
+        {error && (
+          <Alert severity="error" onClose={handleCloseSnackBar}>
+            {error}
+          </Alert>
+        )}
+      </Snackbar>
       <Grid container spacing={{ xs: 4, md: 3 }}>
         {movies.map((movie) => (
           <Grid item xs={6} md={4} lg={3} key={movie.id}>

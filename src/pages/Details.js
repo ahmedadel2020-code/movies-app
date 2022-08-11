@@ -1,17 +1,20 @@
 import {
+  Alert,
   Box,
   Card,
   CardContent,
   CardMedia,
   Chip,
+  Snackbar,
   Stack,
   styled,
   Typography,
 } from "@mui/material";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import StarIcon from "@mui/icons-material/Star";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: "100vh",
@@ -31,7 +34,7 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   display: "flex",
   position: "absolute",
   left: "50%",
-  top: "50%",
+  top: "60%",
   transform: "translate(-50%, -50%)",
   width: "65%",
   [theme.breakpoints.down("lg")]: {
@@ -124,7 +127,9 @@ const Details = () => {
       try {
         const response = await fetch(moviesApiUrl);
         if (!response.ok) {
-          throw new Error("Something went wrong, can't fetch words");
+          throw new Error(
+            "Something went wrong, can't fetch the specified movie"
+          );
         }
         const data = await response.json();
         setMovieDetail(data);
@@ -137,56 +142,79 @@ const Details = () => {
     getMovieDetail();
   }, [id]);
 
+  const handleCloseSnackBar = useCallback((event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackBar(false);
+  }, []);
+
   return (
     <>
-      <StyledCard>
-        <StyledCardMedia
-          component="img"
-          image={imageOriginalUrl + movieDetail.backdrop_path}
-          alt={movieDetail.title}
-        />
-      </StyledCard>
-      <StyledCardContent>
-        <StyledTypographyResponsive>
-          {movieDetail.title}
-        </StyledTypographyResponsive>
-        <InnerCardMedia
-          component="img"
-          image={imageOriginalUrl + movieDetail.poster_path}
-          alt={movieDetail.title}
-        />
-        <StyledBox>
-          <StyledTypography>{movieDetail.title}</StyledTypography>
-          <Stack
-            direction={{ xs: "row", md: "column" }}
-            justifyContent={{ xs: "center" }}
-          >
-            <Stack direction="row" sx={{ mb: 1, mr: 4 }}>
-              <StarIcon sx={{ color: "yellow", mr: 1 }} />{" "}
-              <span>{movieDetail.vote_average} / 10</span>
-            </Stack>
-            <Stack direction="row" sx={{ mb: 2 }}>
-              <TrendingUpIcon sx={{ color: "green", mr: 1 }} />
-              <span>{movieDetail.popularity}</span>
-            </Stack>
-          </Stack>
-          <StyledGenresStack
-            direction="row"
-            flexWrap="wrap"
-            justifyContent={{ xs: "center", md: "flex-start" }}
-          >
-            {movieDetail &&
-              movieDetail.genres.map((genre) => (
-                <StyledChip
-                  key={genre.name}
-                  label={genre.name}
-                  variant="outlined"
-                />
-              ))}
-          </StyledGenresStack>
-          <StyledOverview>{movieDetail.overview}</StyledOverview>
-        </StyledBox>
-      </StyledCardContent>
+      <Loading loading={isLoading} />
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={10000}
+        onClose={handleCloseSnackBar}
+      >
+        {error && (
+          <Alert severity="error" onClose={handleCloseSnackBar}>
+            {error}
+          </Alert>
+        )}
+      </Snackbar>
+      {!error && (
+        <>
+          <StyledCard>
+            <StyledCardMedia
+              component="img"
+              image={imageOriginalUrl + movieDetail.backdrop_path}
+              alt={movieDetail.title}
+            />
+          </StyledCard>
+          <StyledCardContent>
+            <StyledTypographyResponsive>
+              {movieDetail.title}
+            </StyledTypographyResponsive>
+            <InnerCardMedia
+              component="img"
+              image={imageOriginalUrl + movieDetail.poster_path}
+              alt={movieDetail.title}
+            />
+            <StyledBox>
+              <StyledTypography>{movieDetail.title}</StyledTypography>
+              <Stack
+                direction={{ xs: "row", md: "column" }}
+                justifyContent={{ xs: "center" }}
+              >
+                <Stack direction="row" sx={{ mb: 1, mr: 4 }}>
+                  <StarIcon sx={{ color: "yellow", mr: 1 }} />{" "}
+                  <span>{movieDetail.vote_average} / 10</span>
+                </Stack>
+                <Stack direction="row" sx={{ mb: 2 }}>
+                  <TrendingUpIcon sx={{ color: "green", mr: 1 }} />
+                  <span>{movieDetail.popularity}</span>
+                </Stack>
+              </Stack>
+              <StyledGenresStack
+                direction="row"
+                flexWrap="wrap"
+                justifyContent={{ xs: "center", md: "flex-start" }}
+              >
+                {movieDetail &&
+                  movieDetail.genres.map((genre) => (
+                    <StyledChip
+                      key={genre.name}
+                      label={genre.name}
+                      variant="outlined"
+                    />
+                  ))}
+              </StyledGenresStack>
+              <StyledOverview>{movieDetail.overview}</StyledOverview>
+            </StyledBox>
+          </StyledCardContent>
+        </>
+      )}
     </>
   );
 };

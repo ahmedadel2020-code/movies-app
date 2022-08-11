@@ -52,7 +52,7 @@ const MovieCard = ({ movie }) => {
   }, []);
 
   const handleNavigateToMovieDetails = useCallback(() => {
-    navigate(`/${movie.id}`);
+    navigate(`/details/${movie.id}`);
   }, [movie, navigate]);
 
   return (
