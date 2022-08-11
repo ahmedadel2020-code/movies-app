@@ -1,4 +1,4 @@
-import { Alert, Box, Container, Snackbar, styled } from "@mui/material";
+import { Alert, Container, Snackbar, styled } from "@mui/material";
 import React, { useCallback } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -61,7 +61,7 @@ const Home = () => {
           </Alert>
         )}
       </Snackbar>
-      <Grid container spacing={{ xs: 4, md: 3 }}>
+      <Grid container spacing={{ xs: 4, md: 3 }} role="grid">
         {movies.map((movie) => (
           <Grid item xs={6} md={4} lg={3} key={movie.id}>
             <MovieCard movie={movie} />

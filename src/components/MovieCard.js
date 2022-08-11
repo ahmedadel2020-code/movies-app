@@ -56,7 +56,11 @@ const MovieCard = ({ movie }) => {
   }, [movie, navigate]);
 
   return (
-    <StyledCard onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <StyledCard
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      role="card"
+    >
       <CardMedia
         component="img"
         image={imageOriginalUrl + movie.poster_path}

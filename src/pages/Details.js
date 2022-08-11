@@ -173,7 +173,7 @@ const Details = () => {
             />
           </StyledCard>
           <StyledCardContent>
-            <StyledTypographyResponsive>
+            <StyledTypographyResponsive role="movieTitle">
               {movieDetail.title}
             </StyledTypographyResponsive>
             <InnerCardMedia
