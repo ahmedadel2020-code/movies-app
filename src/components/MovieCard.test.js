@@ -5,8 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import MovieCard from "./MovieCard";
 import Details from "../pages/Details";
 
-// mock request to our endpoint words
-
 const movies = rest.get("movie/popular", (req, res, ctx) => {
   return res(
     ctx.json({

@@ -39,7 +39,7 @@ const StyledButton = styled(Button)({
 });
 
 const MovieCard = ({ movie }) => {
-  const [visisble, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const imageOriginalUrl = "https://image.tmdb.org/t/p/original";
   let navigate = useNavigate();
 
@@ -67,7 +67,7 @@ const MovieCard = ({ movie }) => {
         alt={movie.title}
       />
       <StyledBox>
-        {visisble && (
+        {visible && (
           <StyledButton
             variant="contained"
             onClick={handleNavigateToMovieDetails}

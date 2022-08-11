@@ -4,8 +4,6 @@ import { setupServer } from "msw/node";
 import { BrowserRouter } from "react-router-dom";
 import Details from "./Details";
 
-// mock request to our endpoint words
-
 const movie = rest.get("movie/507086", (req, res, ctx) => {
   return res(
     ctx.json({
