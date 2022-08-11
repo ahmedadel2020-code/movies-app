@@ -68,7 +68,7 @@ const MovieCard = ({ movie }) => {
             variant="contained"
             onClick={handleNavigateToMovieDetails}
           >
-            More Details
+            Details
           </StyledButton>
         )}
       </StyledBox>

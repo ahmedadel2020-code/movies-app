@@ -43,7 +43,7 @@ const Home = () => {
     <StyledContainer>
       <Grid container spacing={{ xs: 4, md: 3 }}>
         {movies.map((movie) => (
-          <Grid item xs={12} md={6} lg={4} key={movie.id}>
+          <Grid item xs={6} md={4} lg={3} key={movie.id}>
             <MovieCard movie={movie} />
           </Grid>
         ))}
